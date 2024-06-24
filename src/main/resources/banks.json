@@ -1,0 +1,56 @@
+[
+    {
+        "name": "DEEM",
+        "logo": "logo1.png",
+        "enableAccountDeposit": true,
+        "enableCreditCardBillPayment": true,
+        "enableManualAccountEntry": true,
+        "enableAccountFromDebitCard": true,
+        "enableEIDValidation": true,
+        "enableEIDOnlineValidation": true,
+        "enableNarrationEntry": true,
+        "enablePayinAmountEntry": true,
+        "enableCardBasedCreditCard": true,
+        "enableManualCreditCardEntry": true,
+        "checkAccountNumberLength": true,
+        "accountNumberLength": 10,
+        "additionalInputs": [
+            {
+                "name": "input1",
+                "UIPrompt": "Enter input 1",
+                "numeric": true,
+                "predefinedValues": ["value1", "value2"]
+            },
+            {
+                "name": "input2",
+                "UIPrompt": "Enter input 2",
+                "numeric": false,
+                "predefinedValues": ["value3", "value4"]
+            }
+        ]
+    },
+    {
+        "name": "CBD",
+        "logo": "logo2.png",
+        "enableAccountDeposit": false,
+        "enableCreditCardBillPayment": false,
+        "enableManualAccountEntry": false,
+        "enableAccountFromDebitCard": false,
+        "enableEIDValidation": false,
+        "enableEIDOnlineValidation": false,
+        "enableNarrationEntry": false,
+        "enablePayinAmountEntry": false,
+        "enableCardBasedCreditCard": false,
+        "enableManualCreditCardEntry": false,
+        "checkAccountNumberLength": false,
+        "accountNumberLength": 8,
+        "additionalInputs": [
+            {
+                "name": "input3",
+                "UIPrompt": "Enter input 3",
+                "numeric": true,
+                "predefinedValues": ["value5", "value6"]
+            }
+        ]
+    }
+]
