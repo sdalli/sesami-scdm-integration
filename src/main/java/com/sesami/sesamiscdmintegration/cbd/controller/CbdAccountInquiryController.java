@@ -45,7 +45,8 @@ public class CbdAccountInquiryController {
     @PostMapping("/fetch-account-details-by-account-number")
     public ResponseEntity<AccountDetailsResponse> getPartyAccountRelation(@RequestBody AccountDetailsRequest request) {
     	AccountDetailsResponse responseObject =null;
-    	ResponseEntity<String> response = clientService.getPartyAccountRelation_AccountNumber(request);
+    	// ResponseEntity<String> response = clientService.getPartyAccountRelation_AccountNumber(request);
+    	ResponseEntity<String> response = clientService.getPartyAccountRelation_AccountNumber_mock(request);
     	if(response!= null ) {
     		 RootResponse rootResponse = convertJsonStringResponseToClassObject(response.getBody(), RootResponse.class);
     		
