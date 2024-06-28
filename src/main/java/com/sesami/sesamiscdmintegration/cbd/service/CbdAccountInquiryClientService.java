@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,9 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import com.sesami.sesamiscdmintegration.accountinquiry.bean.AccountDetailsRequest;
 import com.sesami.sesamiscdmintegration.bank.bean.BankApiCustomResponse;
 import com.sesami.sesamiscdmintegration.bank.bean.Transaction;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 @Service
 public class CbdAccountInquiryClientService {
@@ -62,26 +58,36 @@ public class CbdAccountInquiryClientService {
 
 	}
 
-	public ResponseEntity<String> getPartyAccountRelation(String requestBody, String correlationId) {
-
-		/*
-		 * System.setProperty("javax.net.ssl.trustStore",keyStoreJksPath.trim());
-		 * System.setProperty("javax.net.ssl.trustStorePassword",
-		 * keyStoreJksPassword.trim()); System.setProperty("javax.net.ssl.keyStore",
-		 * keyStoreJksPath.trim()); System.setProperty("javax.net.ssl.keyStorePassword",
-		 * keyStoreJksPassword.trim());
-		 */
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", "application/json");
-		headers.set("client-id", clientId);
-		headers.set("client-secret", clientSecret);
-		headers.set("x-correlation-id", correlationId);
-
-		HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-
-		return restTemplate.exchange(cbdWebEndPointURL + serviceUrl, HttpMethod.POST, entity, String.class);
-	}
+//	public ResponseEntity<String> getPartyAccountRelation(String requestBody, String correlationId) {
+//		HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+//
+//        return restTemplate.exchange(cbdWebEndPointURL+serviceUrl, HttpMethod.POST, entity, String.class);
+//    }
+    
+    
+//	public ResponseEntity<String> getPartyAccountRelation_AccountNumber(AccountDetailsRequest accountDetailsRequest) {
+//
+//		String cbdaccountInquiryRequest = null;
+//
+//		/*
+//		 * System.setProperty("javax.net.ssl.trustStore",keyStoreJksPath.trim());
+//		 * System.setProperty("javax.net.ssl.trustStorePassword",
+//		 * keyStoreJksPassword.trim()); System.setProperty("javax.net.ssl.keyStore",
+//		 * keyStoreJksPath.trim()); System.setProperty("javax.net.ssl.keyStorePassword",
+//		 * keyStoreJksPassword.trim());
+//		 */
+//
+//
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.set("Content-Type", "application/json");
+//		headers.set("client-id", clientId);
+//		headers.set("client-secret", clientSecret);
+//		headers.set("x-correlation-id", correlationId);
+//
+//		HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+//
+//		return restTemplate.exchange(cbdWebEndPointURL + serviceUrl, HttpMethod.POST, entity, String.class);
+//	}
 
 	public ResponseEntity<String> getPartyAccountRelation_AccountNumber(AccountDetailsRequest accountDetailsRequest) {
 
@@ -93,6 +99,7 @@ public class CbdAccountInquiryClientService {
 		 * keyStoreJksPath.trim()); System.setProperty("javax.net.ssl.keyStorePassword",
 		 * keyStoreJksPassword.trim());
 		 */
+
 
 		if (accountDetailsRequest.getAccountNumber().startsWith("1")) {
 			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\"" + UUID.randomUUID().toString()
@@ -114,6 +121,7 @@ public class CbdAccountInquiryClientService {
 		headers.set("client-id", clientId);
 		headers.set("client-secret", clientSecret);
 		headers.set("x-correlation-id", UUID.randomUUID().toString());
+
 
 		HttpEntity<String> entity = new HttpEntity<>(cbdaccountInquiryRequest, headers);
 
@@ -267,7 +275,10 @@ public class CbdAccountInquiryClientService {
 		}
 		ResponseEntity<String> responseString = null;
 		try {
-			responseString = new ResponseEntity<>(response, HttpStatus.OK);
+
+			responseString = restTemplate.exchange(cbdWebEndPointURL + serviceUrl,
+					HttpMethod.POST, entity, String.class);
+
 
 			logger.debug("Response Status Code: {}", responseString.getStatusCode().value());
 			logger.debug("Response Headers: {}", responseString.getHeaders());
@@ -287,12 +298,15 @@ public class CbdAccountInquiryClientService {
 		return responseString;
 	}
 
+
 	public BankApiCustomResponse sendCashDepositTxnRequest(Transaction deposit) throws Exception {
 
 		System.setProperty("javax.net.ssl.trustStore", keyStoreJksPath.trim());
 		System.setProperty("javax.net.ssl.trustStorePassword", keyStoreJksPassword.trim());
 		System.setProperty("javax.net.ssl.keyStore", keyStoreJksPath.trim());
 		System.setProperty("javax.net.ssl.keyStorePassword", keyStoreJksPassword.trim());
+
+ 
 
 		final RestTemplate restTemplate = new RestTemplate();
 		String transactionPostingServiceUrl = "https://tgscdmtest.cbd.dev/exp-currentaccount-svcs-api/Services/CurrentAccount/Xfer/XferAdd";
