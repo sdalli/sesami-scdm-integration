@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.sesami.sesamiscdmintegration.accountinquiry.bean.AccountDetailsRequest;
@@ -86,10 +87,9 @@ public class CbdAccountInquiryClientService {
     }
     
     
-    public ResponseEntity<String> getPartyAccountRelation_AccountNumber(AccountDetailsRequest accountDetailsRequest) {
-    	
-    	
-    	String cbdaccountInquiryRequest = null; 
+	public ResponseEntity<String> getPartyAccountRelation_AccountNumber(AccountDetailsRequest accountDetailsRequest) {
+
+		String cbdaccountInquiryRequest = null;
 		/*
 		 * System.setProperty("javax.net.ssl.trustStore",keyStoreJksPath.trim());
 		 * System.setProperty("javax.net.ssl.trustStorePassword",
@@ -97,37 +97,51 @@ public class CbdAccountInquiryClientService {
 		 * keyStoreJksPath.trim()); System.setProperty("javax.net.ssl.keyStorePassword",
 		 * keyStoreJksPassword.trim());
 		 */
-		
 
-		if ( accountDetailsRequest.getAccountNumber().startsWith("1")) {
-			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\""+UUID.randomUUID().toString()+"\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\""+svcProviderName+"\","
-					+ "\"SvcProviderId\":\""+svcProviderId+"\",\"SvcName\":\""+partyAcctRelInqSCDMAcctVal+"\"}},\"PartyAcctRelSel\":[{\"AcctKeys\":{\"AcctId\":\""+accountDetailsRequest.getAccountNumber().trim()+"\"}}]}}";
+		if (accountDetailsRequest.getAccountNumber().startsWith("1")) {
+			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\"" + UUID.randomUUID().toString()
+					+ "\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\"" + svcProviderName + "\","
+					+ "\"SvcProviderId\":\"" + svcProviderId + "\",\"SvcName\":\"" + partyAcctRelInqSCDMAcctVal
+					+ "\"}},\"PartyAcctRelSel\":[{\"AcctKeys\":{\"AcctId\":\""
+					+ accountDetailsRequest.getAccountNumber().trim() + "\"}}]}}";
 		} else {
-			
-			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\""+UUID.randomUUID().toString()+"\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\""+svcProviderName+"\","
-					+ "\"SvcProviderId\":\""+svcProviderId+"\",\"SvcName\":\""+partyAcctRelInqSCDMAcctInq+"\"}},\"PartyAcctRelSel\":[{\"AcctKeys\":{\"VirAcctId\":\""+accountDetailsRequest.getAccountNumber().trim()+"\"}}]}}";
+
+			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\"" + UUID.randomUUID().toString()
+					+ "\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\"" + svcProviderName + "\","
+					+ "\"SvcProviderId\":\"" + svcProviderId + "\",\"SvcName\":\"" + partyAcctRelInqSCDMAcctInq
+					+ "\"}},\"PartyAcctRelSel\":[{\"AcctKeys\":{\"VirAcctId\":\""
+					+ accountDetailsRequest.getAccountNumber().trim() + "\"}}]}}";
 		}
-		
-    	
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-        headers.set("client-id", clientId);
-        headers.set("client-secret", clientSecret);
-        headers.set("x-correlation-id", UUID.randomUUID().toString());
 
-        HttpEntity<String> entity = new HttpEntity<>(cbdaccountInquiryRequest, headers);
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", "application/json");
+		headers.set("client-id", clientId);
+		headers.set("client-secret", clientSecret);
+		headers.set("x-correlation-id", UUID.randomUUID().toString());
+		ResponseEntity<String> responseString =  null;
+		try {
+			HttpEntity<String> entity = new HttpEntity<>(cbdaccountInquiryRequest, headers);
 
-        ResponseEntity<String> responseString =  restTemplate.exchange(cbdWebEndPointURL+serviceUrl, HttpMethod.POST, entity, String.class);
-        
-        logger.debug("Response Status Code: {}", responseString.getStatusCode().value());
-        logger.debug("Response Headers: {}", responseString.getHeaders());
-        logger.debug("Response Body: {}", responseString.getBody());
-            
-        logger.debug("Response JSON String ::: "+responseString);
-        
-        
-        return responseString; 
-    }
+			responseString = restTemplate.exchange(cbdWebEndPointURL + serviceUrl,
+					HttpMethod.POST, entity, String.class);
+
+			logger.debug("Response Status Code: {}", responseString.getStatusCode().value());
+			logger.debug("Response Headers: {}", responseString.getHeaders());
+			logger.debug("Response Body: {}", responseString.getBody());
+
+			logger.debug("Response JSON String ::: " + responseString);
+
+		} catch (HttpClientErrorException e) {
+			logger.error("HttpClientErrorException: {}", e.getMessage());
+			String errorResponse = e.getResponseBodyAsString();
+			logger.error("Error Response Body: {}", errorResponse);
+
+			// You can create a mock response or return the error response directly
+			responseString = new ResponseEntity<>(errorResponse, e.getStatusCode());
+		}
+
+		return responseString;
+	}
  
     
     

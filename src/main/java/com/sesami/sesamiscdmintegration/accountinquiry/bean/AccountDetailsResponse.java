@@ -24,6 +24,11 @@ public class AccountDetailsResponse {
     private String currencyCode;
     private String accountStatus;
     private Boolean depositAllowed;
+    private String bankErrorCode;
+    private String bankErrorDesc;
+    private String bankApiResponseMessage;
+    private String cdmApiCode;
+    private String cdmCustomerErrorMessage;
 
     
 }
