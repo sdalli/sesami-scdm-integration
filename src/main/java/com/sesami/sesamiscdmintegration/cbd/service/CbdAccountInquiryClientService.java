@@ -58,11 +58,12 @@ public class CbdAccountInquiryClientService {
 
 	}
 
-//	public ResponseEntity<String> getPartyAccountRelation(String requestBody, String correlationId) {
-//		HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-//
-//        return restTemplate.exchange(cbdWebEndPointURL+serviceUrl, HttpMethod.POST, entity, String.class);
-//    }
+	public ResponseEntity<String> getPartyAccountRelation(String requestBody, String correlationId) {
+		
+		HttpEntity<String> entity = new HttpEntity<>(requestBody);
+
+        return restTemplate.exchange(cbdWebEndPointURL+serviceUrl, HttpMethod.POST, entity, String.class);
+    }
     
     
 //	public ResponseEntity<String> getPartyAccountRelation_AccountNumber(AccountDetailsRequest accountDetailsRequest) {
