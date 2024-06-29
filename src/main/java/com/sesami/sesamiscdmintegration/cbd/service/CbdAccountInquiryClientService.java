@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -140,21 +141,21 @@ public class CbdAccountInquiryClientService {
 
 	public ResponseEntity<String> getPartyAccountRelation_AccountNumber_mock(
 			AccountDetailsRequest accountDetailsRequest) {
-		String cbdaccountInquiryRequest;
-
-		if (accountDetailsRequest.getAccountNumber().startsWith("1")) {
-			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\"" + UUID.randomUUID().toString()
-					+ "\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\"" + svcProviderName + "\","
-					+ "\"SvcProviderId\":\"" + svcProviderId + "\",\"SvcName\":\"" + partyAcctRelInqSCDMAcctVal
-					+ "\"}},\"PartyAcctRelSel\":[{\"AcctKeys\":{\"AcctId\":\""
-					+ accountDetailsRequest.getAccountNumber().trim() + "\"}}]}}";
-		} else {
-			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\"" + UUID.randomUUID().toString()
-					+ "\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\"" + svcProviderName + "\","
-					+ "\"SvcProviderId\":\"" + svcProviderId + "\",\"SvcName\":\"" + partyAcctRelInqSCDMAcctInq
-					+ "\"}},\"PartyAcctRelSel\":[{\"AcctKeys\":{\"VirAcctId\":\""
-					+ accountDetailsRequest.getAccountNumber().trim() + "\"}}]}}";
-		}
+//		String cbdaccountInquiryRequest;
+//
+//		if (accountDetailsRequest.getAccountNumber().startsWith("1")) {
+//			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\"" + UUID.randomUUID().toString()
+//					+ "\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\"" + svcProviderName + "\","
+//					+ "\"SvcProviderId\":\"" + svcProviderId + "\",\"SvcName\":\"" + partyAcctRelInqSCDMAcctVal
+//					+ "\"}},\"PartyAcctRelSel\":[{\"AcctKeys\":{\"AcctId\":\""
+//					+ accountDetailsRequest.getAccountNumber().trim() + "\"}}]}}";
+//		} else {
+//			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\"" + UUID.randomUUID().toString()
+//					+ "\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\"" + svcProviderName + "\","
+//					+ "\"SvcProviderId\":\"" + svcProviderId + "\",\"SvcName\":\"" + partyAcctRelInqSCDMAcctInq
+//					+ "\"}},\"PartyAcctRelSel\":[{\"AcctKeys\":{\"VirAcctId\":\""
+//					+ accountDetailsRequest.getAccountNumber().trim() + "\"}}]}}";
+//		}
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "application/json");
@@ -162,15 +163,14 @@ public class CbdAccountInquiryClientService {
 		headers.set("client-secret", clientSecret);
 		headers.set("x-correlation-id", UUID.randomUUID().toString());
 
-		HttpEntity<String> entity = new HttpEntity<>(cbdaccountInquiryRequest, headers);
 
 		// Random response generation
 		int randomResp = (int) Math.floor(Math.random() * 2);
-		String response;
+		String mockResponse;
 		switch (randomResp) {
 		case 0:
-			response = """
-										   {
+			mockResponse = """
+					  {
 					  "PartyAcctRelInqRs": {
 					    "Status": {
 					      "StatusCode": "0",
@@ -219,10 +219,11 @@ public class CbdAccountInquiryClientService {
 					    }
 					  }
 					}
-										""";
+					
+					""";
 			break;
 		case 1:
-			response = """
+			mockResponse = """
 					        	 		{
 					    "PartyAcctRelInqRs": {
 					        "Status": {
@@ -255,7 +256,7 @@ public class CbdAccountInquiryClientService {
 //				    }
 
 		default:
-			response = """
+			mockResponse = """
 					             		{
 					    "PartyAcctRelInqRs": {
 					        "Status": {
@@ -277,8 +278,13 @@ public class CbdAccountInquiryClientService {
 		ResponseEntity<String> responseString = null;
 		try {
 
-			responseString = restTemplate.exchange(cbdWebEndPointURL + serviceUrl,
-					HttpMethod.POST, entity, String.class);
+//			responseString = restTemplate.exchange(cbdWebEndPointURL + serviceUrl,
+//					HttpMethod.POST, entity, String.class);
+			
+		
+			 
+		responseString = new ResponseEntity<>(mockResponse, HttpStatus.OK);
+
 
 
 			logger.debug("Response Status Code: {}", responseString.getStatusCode().value());
