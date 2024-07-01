@@ -31,8 +31,11 @@ public class CbdAccountInquiryClientService {
 	@Value("${cbd.client.webendpoint.url}")
 	private String cbdWebEndPointURL;
 
-	@Value("${cbd.client.service.url}")
-	private String serviceUrl;
+	@Value("${cbd.client.service.account.inquiry.url}")
+	private String accountInquiryUrl;
+	
+	@Value("${cbd.client.service.transaction.posting.url}")
+	private String transactionPostingUrl;
 
 	@Value("${cbd.client.service.clientId}")
 	private String clientId;
@@ -63,7 +66,7 @@ public class CbdAccountInquiryClientService {
 		
 		HttpEntity<String> entity = new HttpEntity<>(requestBody);
 
-        return restTemplate.exchange(cbdWebEndPointURL+serviceUrl, HttpMethod.POST, entity, String.class);
+        return restTemplate.exchange(cbdWebEndPointURL+accountInquiryUrl, HttpMethod.POST, entity, String.class);
     }
     
     
@@ -127,7 +130,7 @@ public class CbdAccountInquiryClientService {
 
 		HttpEntity<String> entity = new HttpEntity<>(cbdaccountInquiryRequest, headers);
 
-		ResponseEntity<String> responseString = restTemplate.exchange(cbdWebEndPointURL + serviceUrl, HttpMethod.POST,
+		ResponseEntity<String> responseString = restTemplate.exchange(cbdWebEndPointURL + accountInquiryUrl, HttpMethod.POST,
 				entity, String.class);
 
 		logger.debug("Response Status Code: {}", responseString.getStatusCode().value());
@@ -316,7 +319,7 @@ public class CbdAccountInquiryClientService {
  
 
 		final RestTemplate restTemplate = new RestTemplate();
-		String transactionPostingServiceUrl = "https://tgscdmtest.cbd.dev/exp-currentaccount-svcs-api/Services/CurrentAccount/Xfer/XferAdd";
+		// String transactionPostingServiceUrl = "https://tgscdmtest.cbd.dev/exp-currentaccount-svcs-api/Services/CurrentAccount/Xfer/XferAdd";
 
 //		String cbdTxnPostingRequest = """ 
 //				{
@@ -426,14 +429,14 @@ public class CbdAccountInquiryClientService {
 		headers.set("x-correlation-id", UUID.randomUUID().toString());
 
 		HttpEntity<String> entity = new HttpEntity<>(cbdTxnPostingRequest, headers);
-		logger.debug("Request URL: {}", transactionPostingServiceUrl);
+		logger.debug("Request URL: {}", cbdWebEndPointURL+transactionPostingUrl);
 		logger.debug("Request Headers: {}", headers);
 		logger.debug("Request Body: {}", cbdTxnPostingRequest);
 
 		logger.debug("Request JSON String ::: " + cbdTxnPostingRequest);
 		System.out.println("Request JSON String ::: " + cbdTxnPostingRequest);
 
-		ResponseEntity<String> responseString = restTemplate.exchange(transactionPostingServiceUrl, HttpMethod.POST,
+		ResponseEntity<String> responseString = restTemplate.exchange(cbdWebEndPointURL+transactionPostingUrl, HttpMethod.POST,
 				entity, String.class);
 		logger.debug("Response Status Code: {}", responseString.getStatusCode());
 		logger.debug("Response Headers: {}", responseString.getHeaders());

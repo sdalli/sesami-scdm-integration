@@ -55,7 +55,7 @@ public class CbdAccountInquiryController {
     		
     		
     		responseObject = new AccountDetailsResponse();
-    		responseObject.setRequestUniqueNumber(request.getDeviceId()+dateToString("yyyyMMddHHmmss",new Date()).toString());
+    		responseObject.setRequestUniqueNumber(generateUniqueRequestNumber(request.getDeviceId()));
     		responseObject.setAccountNumber(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctKeys().getAcctId());
     		responseObject.setAccountHolderName(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctTitle());
     		responseObject.setAccountType(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctType().getAcctTypeValue());
@@ -64,50 +64,9 @@ public class CbdAccountInquiryController {
     		responseObject.setCurrencyCode(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getCurCode().getCurCodeValue());
     		responseObject.setAccountStatus(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctRec().getAcctStatus().getAcctStatusCode());
     		responseObject.setDepositAllowed(Boolean.TRUE);
-    	}else {
-    		 ObjectMapper objectMapper = new ObjectMapper();
-             JsonNode rootNode;
-			try {
-				rootNode = objectMapper.readTree(response.getBody().toString());
-				  // Access individual elements
-				JsonNode partyAcctRelInqRsNode = rootNode.path("PartyAcctRelInqRs");
-	            JsonNode statusNode = partyAcctRelInqRsNode.path("Status");
-	            JsonNode additionalStatusNode = statusNode.path("AdditionalStatus");
-
-	            int statusCode = statusNode.path("StatusCode").asInt();
-	            String severity = statusNode.path("Severity").asText();
-	            String statusDesc = statusNode.path("StatusDesc").asText();
-	            int additionalStatusCode = additionalStatusNode.path("StatusCode").asInt();
-	            String additionalSeverity = additionalStatusNode.path("Severity").asText();
-	            String additionalStatusDesc = additionalStatusNode.path("StatusDesc").asText();
-	            String rqUID = partyAcctRelInqRsNode.path("RqUID").asText();
-
-	            System.out.println("Status Code: " + statusCode);
-	            System.out.println("Severity: " + severity);
-	            System.out.println("Status Description: " + statusDesc);
-	            System.out.println("Additional Status Code: " + additionalStatusCode);
-	            System.out.println("Additional Severity: " + additionalSeverity);
-	            System.out.println("Additional Status Description: " + additionalStatusDesc);
-	            System.out.println("RqUID: " + rqUID);
-	            
-	            responseObject = new AccountDetailsResponse();
-	    		responseObject.setRequestUniqueNumber(request.getDeviceId()+dateToString("yyyyMMddHHmmss",new Date()).toString());
-	    		responseObject.setAccountNumber(request.getAccountNumber());
-	    		responseObject.setAccountHolderName("NA");
-	    		responseObject.setAccountType("NA");
-	    		responseObject.setDailyDepositLimit("1");
-	    		responseObject.setMonthtlyTransactionLimit("1");
-	    		responseObject.setCurrencyCode("AED");
-	    		responseObject.setAccountStatus("INACTIVE");
-	    		responseObject.setBankErrorCode(String.valueOf(additionalStatusCode));
-	    		responseObject.setBankErrorDesc(additionalStatusDesc);
-	    		responseObject.setCdmApiCode(rqUID);
-	    		responseObject.setCdmCustomerErrorMessage("");
-	    		
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    	}else if(response!= null && response.getStatusCode() == HttpStatus.NOT_FOUND) {
+    		
+             responseObject = handleNotFoundResponse(response, request);
            
     	}
         
@@ -135,5 +94,40 @@ public class CbdAccountInquiryController {
 		return null;
  }
 
+    private String generateUniqueRequestNumber(String deviceId) {
+        return deviceId + dateToString("yyyyMMddHHmmss", new Date());
+    }
+    
+    private AccountDetailsResponse handleNotFoundResponse(ResponseEntity<String> response, AccountDetailsRequest request) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+            JsonNode partyAcctRelInqRsNode = rootNode.path("PartyAcctRelInqRs");
+            JsonNode statusNode = partyAcctRelInqRsNode.path("Status");
+            JsonNode additionalStatusNode = statusNode.path("AdditionalStatus");
+
+            int additionalStatusCode = additionalStatusNode.path("StatusCode").asInt();
+            String additionalStatusDesc = additionalStatusNode.path("StatusDesc").asText();
+            // String rqUID = partyAcctRelInqRsNode.path("RqUID").asText();
+
+            AccountDetailsResponse responseObject = new AccountDetailsResponse();
+            responseObject.setRequestUniqueNumber(generateUniqueRequestNumber(request.getDeviceId()));
+            responseObject.setAccountNumber(request.getAccountNumber());
+            responseObject.setAccountHolderName("NA");
+            responseObject.setAccountType("NA");
+            responseObject.setDailyDepositLimit("1");
+            responseObject.setMonthtlyTransactionLimit("1");
+            responseObject.setCurrencyCode("AED");
+            responseObject.setAccountStatus("INACTIVE");
+            responseObject.setBankErrorCode(String.valueOf(additionalStatusCode));
+            responseObject.setBankErrorDesc(additionalStatusDesc);
+            responseObject.setCdmApiCode("2");
+            responseObject.setCdmCustomerErrorMessage("");
+
+            return responseObject;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error processing JSON response", e);
+        }
+    }
 
 }

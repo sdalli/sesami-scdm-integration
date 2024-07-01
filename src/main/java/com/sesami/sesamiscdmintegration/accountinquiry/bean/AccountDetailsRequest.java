@@ -12,6 +12,7 @@ public class AccountDetailsRequest {
     private String accountNumber;
     private String deviceId;
     private String bankCode;
+    private String glAccountNumber;
 
   
 }
