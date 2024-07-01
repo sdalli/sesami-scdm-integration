@@ -168,7 +168,7 @@ public class CbdAccountInquiryClientService {
 
 
 		// Random response generation
-		int randomResp = (int) Math.floor(Math.random() * 2);
+		int randomResp = 1; //(int) Math.floor(Math.random() * 2);
 		String mockResponse;
 		switch (randomResp) {
 		case 0:
@@ -227,21 +227,27 @@ public class CbdAccountInquiryClientService {
 			break;
 		case 1:
 			mockResponse = """
-					        	 		{
-					    "PartyAcctRelInqRs": {
-					        "Status": {
-					            "StatusCode": 0,
-					            "Severity": "Info",
-					            "StatusDesc": "Success",
-					            "AdditionalStatus": {
-					                "StatusCode": 750,
-					                "Severity": "Info",
-					                "StatusDesc": "Account is not eligible for transaction."
-					            }
-					        },
-					        "RqUID": "9f46aec4-2d07-46ec-8138-ee6d4e60b846"
-					    }
-					}
+					        	 {
+    "XferAddRs": {
+        "Status": {
+            "StatusCode": 0,
+            "Severity": "Info",
+            "StatusDesc": "Success"
+        },
+        "RqUID": "f7f9bbcf-ff69-4810-8724-122631963213",
+        "XferRec": {
+            "XferInfo": {
+                "RefData": {
+                    "RefIdent": "ATP-06929688"
+                }
+            }
+        },
+        "XferStatusRec": {
+            "XferStatusCode": "-120",
+            "XferStatusDesc": "TRANSACTION POSTING FAILED ERR(70)"
+        }
+    }
+}
 					        	 		""";
 			break;
 

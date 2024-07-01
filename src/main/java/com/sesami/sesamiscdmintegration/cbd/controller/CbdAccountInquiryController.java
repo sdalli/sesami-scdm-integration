@@ -26,10 +26,16 @@ public class CbdAccountInquiryController {
 
 
     private final CbdAccountInquiryClientService clientService;
+    
+   
+    
+    
 
     @Autowired
-    public CbdAccountInquiryController(CbdAccountInquiryClientService clientService) {
+    public CbdAccountInquiryController(CbdAccountInquiryClientService clientService ) {
         this.clientService = clientService;
+       // this.transactionService = transactionService;
+        
     }
 
 //    @PostMapping("/party-account-relation")
@@ -56,14 +62,23 @@ public class CbdAccountInquiryController {
     		
     		responseObject = new AccountDetailsResponse();
     		responseObject.setRequestUniqueNumber(generateUniqueRequestNumber(request.getDeviceId()));
-    		responseObject.setAccountNumber(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctKeys().getAcctId());
-    		responseObject.setAccountHolderName(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctTitle());
-    		responseObject.setAccountType(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctType().getAcctTypeValue());
-    		responseObject.setDailyDepositLimit(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getAmt());
-    		responseObject.setMonthtlyTransactionLimit(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getAmt());
-    		responseObject.setCurrencyCode(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getCurCode().getCurCodeValue());
-    		responseObject.setAccountStatus(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctRec().getAcctStatus().getAcctStatusCode());
-    		responseObject.setDepositAllowed(Boolean.TRUE);
+    		if(rootResponse.getPartyAcctRelInqRs()!=null) {
+    			responseObject.setAccountNumber(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctKeys().getAcctId());
+        		responseObject.setAccountHolderName(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctTitle());
+        		responseObject.setAccountType(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctType().getAcctTypeValue());
+        		responseObject.setDailyDepositLimit(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getAmt());
+        		responseObject.setMonthtlyTransactionLimit(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getAmt());
+        		responseObject.setCurrencyCode(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getCurCode().getCurCodeValue());
+        		responseObject.setAccountStatus(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctRec().getAcctStatus().getAcctStatusCode());
+        		responseObject.setDepositAllowed(Boolean.TRUE);
+	    		responseObject.setBankErrorCode(String.valueOf(rootResponse.getPartyAcctRelInqRs().getStatus().getStatusCode()));
+	            responseObject.setBankErrorDesc(rootResponse.getPartyAcctRelInqRs().getStatus().getStatusDesc());
+	           // responseObject.setCdmApiCode(customPropertiesMap.get("possible").getCode());
+	          //  responseObject.setCdmCustomerErrorMessage(customPropertiesMap.get("possible").getMessage());
+    		}else {
+    			 responseObject = handleNotFoundResponse(response, request);
+    		}
+    		
     	}else if(response!= null && response.getStatusCode() == HttpStatus.NOT_FOUND) {
     		
              responseObject = handleNotFoundResponse(response, request);
@@ -72,6 +87,49 @@ public class CbdAccountInquiryController {
         
         return ResponseEntity.ok(responseObject);
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     public static StringBuilder dateToString(String format, Date fromdate){	
@@ -100,6 +158,8 @@ public class CbdAccountInquiryController {
     
     private AccountDetailsResponse handleNotFoundResponse(ResponseEntity<String> response, AccountDetailsRequest request) {
         ObjectMapper objectMapper = new ObjectMapper();
+       
+
         try {
             JsonNode rootNode = objectMapper.readTree(response.getBody());
             JsonNode partyAcctRelInqRsNode = rootNode.path("PartyAcctRelInqRs");
@@ -121,8 +181,8 @@ public class CbdAccountInquiryController {
             responseObject.setAccountStatus("INACTIVE");
             responseObject.setBankErrorCode(String.valueOf(additionalStatusCode));
             responseObject.setBankErrorDesc(additionalStatusDesc);
-            responseObject.setCdmApiCode("2");
-            responseObject.setCdmCustomerErrorMessage("");
+          //  responseObject.setCdmApiCode(customPropertiesMap.get("cdm.deposit.not.possible.account.inactive").getCode());
+           // responseObject.setCdmCustomerErrorMessage(customPropertiesMap.get("cdm.deposit.not.possible.account.inactive").getMessage());
 
             return responseObject;
         } catch (JsonProcessingException e) {
