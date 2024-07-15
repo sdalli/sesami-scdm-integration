@@ -20,7 +20,7 @@ import com.sesami.sesamiscdmintegration.accountinquiry.bean.AccountDetailsRespon
 import com.sesami.sesamiscdmintegration.cbd.accountInquiryBean.RootResponse;
 import com.sesami.sesamiscdmintegration.cbd.service.CbdAccountInquiryClientService;
 
-@RequestMapping("/api/client")
+@RequestMapping("/api/client/accountInquiry")
 @RestController
 public class CbdAccountInquiryController {
 

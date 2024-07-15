@@ -1,6 +1,6 @@
 package com.sesami.sesamiscdmintegration.accountinquiry.bean;
 
-import lombok.*;
+//import lombok.*;
 
 //@Setter
 //@Getter

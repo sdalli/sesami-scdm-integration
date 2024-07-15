@@ -1,8 +1,13 @@
 package com.sesami.sesamiscdmintegration.cbd.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.sesami.sesamiscdmintegration.cbd.webServiceClient.CbdWebServiceClient;
+
 public class CbdTransactionPostingService {
 
-	
+	@Autowired
+	private CbdWebServiceClient cbdWebServiceClient;
 	
 	
 	// Java 22 
@@ -66,6 +71,14 @@ public class CbdTransactionPostingService {
 //		    generateCreditRefDesc(deposit),
 //		    generateCreditRefDesc(deposit)
 //		);
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }
