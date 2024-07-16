@@ -1,7 +1,7 @@
 package com.sesami.sesamiscdmintegration.cbd.accountInquiryBean;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RootResponse {
+public class CbdAccountInquiryServiceRootResponse {
 	 @JsonProperty("PartyAcctRelInqRs")
     private PartyAcctRelInqRs PartyAcctRelInqRs;
 

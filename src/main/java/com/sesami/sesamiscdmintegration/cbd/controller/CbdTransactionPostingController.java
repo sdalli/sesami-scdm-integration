@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sesami.sesamiscdmintegration.accountinquiry.bean.AccountDetailsRequest;
-import com.sesami.sesamiscdmintegration.accountinquiry.bean.AccountDetailsResponse;
-import com.sesami.sesamiscdmintegration.cbd.accountInquiryBean.RootResponse;
-import com.sesami.sesamiscdmintegration.cbd.service.CbdAccountInquiryClientService;
 import com.sesami.sesamiscdmintegration.cbd.service.CbdTransactionPostingService;
 import com.sesami.sesamiscdmintegration.transactionPosting.bean.TransactionPostingRequestBean;
 import com.sesami.sesamiscdmintegration.transactionPosting.bean.TransactionPostingResponseBean;
@@ -131,41 +127,16 @@ public class CbdTransactionPostingController {
 	    public ResponseEntity<TransactionPostingResponseBean> transactionPostingService(@RequestBody TransactionPostingRequestBean transactionPostingRequestBean) {
 		 TransactionPostingResponseBean responseObject =null;
 
-	    	// ResponseEntity<String> response = clientService.getPartyAccountRelation_AccountNumber(request);
-	    	ResponseEntity<String> response = cbdTransactionPostingService.getPartyAccountRelation_AccountNumber_mock(request);
-	    	if(response!= null && response.getStatusCode() == HttpStatus.OK) {
+		 
 
-	    		//  RootResponse rootResponse = convertJsonStringResponseToClassObject(response.getBody(), RootResponse.class);
-	    		
-	    		
-	    		responseObject = new TransactionPostingResponseBean();
-	    		responseObject.setRequestUniqueNumber(transactionPostingRequestBean.getRequestUniqueNumber());
-//	    		if(rootResponse.getPartyAcctRelInqRs()!=null) {
-//	    			responseObject.setAccountNumber(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctKeys().getAcctId());
-//	        		responseObject.setAccountHolderName(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctTitle());
-//	        		responseObject.setAccountType(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctType().getAcctTypeValue());
-//	        		responseObject.setDailyDepositLimit(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getAmt());
-//	        		responseObject.setMonthtlyTransactionLimit(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getAmt());
-//	        		responseObject.setCurrencyCode(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctInfo().getAcctBal().getCurAmt().getCurCode().getCurCodeValue());
-//	        		responseObject.setAccountStatus(rootResponse.getPartyAcctRelInqRs().getPartyAcctRelRec().getPartyAcctRelInfo().getAcctRef().getAcctRec().getAcctStatus().getAcctStatusCode());
-//	        		responseObject.setDepositAllowed(Boolean.TRUE);
-//		    		responseObject.setBankErrorCode(String.valueOf(rootResponse.getPartyAcctRelInqRs().getStatus().getStatusCode()));
-//		            responseObject.setBankErrorDesc(rootResponse.getPartyAcctRelInqRs().getStatus().getStatusDesc());
-//		           // responseObject.setCdmApiCode(customPropertiesMap.get("possible").getCode());
-//		          //  responseObject.setCdmCustomerErrorMessage(customPropertiesMap.get("possible").getMessage());
-//	    		}else {
-//	    			 responseObject = handleNotFoundResponse(response, request);
-//	    		}
-	    		
-	    	}else if(response!= null && response.getStatusCode() == HttpStatus.NOT_FOUND) {
-	    		
-	          //    responseObject = handleNotFoundResponse(response, request);
-	           
-	    	}
+		 TransactionPostingResponseBean transactionPostingResponseBean = cbdTransactionPostingService.sendCashDepositTxnRequest(transactionPostingRequestBean);
+		 
+		 
+		 
+
 	        
-	        return ResponseEntity.ok(responseObject);
+	      return ResponseEntity.ok(transactionPostingResponseBean);
 	    }
-	
 	
 	
 	

@@ -168,7 +168,7 @@ public class CbdAccountInquiryClientService {
 
 
 		// Random response generation
-		int randomResp = 1; //(int) Math.floor(Math.random() * 2);
+		int randomResp = (int) Math.floor(Math.random() * 2);
 		String mockResponse;
 		switch (randomResp) {
 		case 0:
@@ -315,7 +315,7 @@ public class CbdAccountInquiryClientService {
 	}
 
 
-	public BankApiCustomResponse sendCashDepositTxnRequest(Transaction deposit) throws Exception {
+	public BankApiCustomResponse<String> sendCashDepositTxnRequest(Transaction deposit) throws Exception {
 
 		System.setProperty("javax.net.ssl.trustStore", keyStoreJksPath.trim());
 		System.setProperty("javax.net.ssl.trustStorePassword", keyStoreJksPassword.trim());
@@ -452,8 +452,15 @@ public class CbdAccountInquiryClientService {
 		System.out.println(responseString);
 		// System.out.println("Result ::::::::::: " + result.toString());
 
-		return new BankApiCustomResponse(responseString.getStatusCode().value(), responseString.getHeaders(),
-				cbdTxnPostingRequest, responseString.getBody());
+//		return new BankApiCustomResponse(responseString.getStatusCode().value(), responseString.getHeaders(),
+//				cbdTxnPostingRequest, responseString.getBody());
+		 return new BankApiCustomResponse<>(
+                 responseString.getStatusCode().value(), 
+                 responseString.getHeaders(), 
+                 cbdTxnPostingRequest, 
+                 responseString.getBody(), 
+                 responseString
+         );
 	}
 
 	public String generateCreditRefDesc(Transaction deposit) { // ,String customerNarration, String locationName, String

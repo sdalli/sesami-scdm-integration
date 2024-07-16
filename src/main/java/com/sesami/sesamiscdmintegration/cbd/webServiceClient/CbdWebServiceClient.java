@@ -1,5 +1,6 @@
 package com.sesami.sesamiscdmintegration.cbd.webServiceClient;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -12,15 +13,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.sesami.sesamiscdmintegration.accountinquiry.bean.AccountDetailsRequest;
 import com.sesami.sesamiscdmintegration.bank.bean.BankApiCustomResponse;
-import com.sesami.sesamiscdmintegration.bank.bean.Transaction;
+import com.sesami.sesamiscdmintegration.common.exception.CustomException;
+import com.sesami.sesamiscdmintegration.transactionPosting.bean.TransactionPostingRequestBean;
 
 @Service
 public class CbdWebServiceClient {
-	Logger logger = LoggerFactory.getLogger(CbdWebServiceClient.class);
+	Logger LOGGER = LoggerFactory.getLogger(CbdWebServiceClient.class.getName());
 
 	@Value("${server.ssl.keyStoreJksPath}")
 	private String keyStoreJksPath;
@@ -33,7 +36,7 @@ public class CbdWebServiceClient {
 
 	@Value("${cbd.client.service.account.inquiry.url}")
 	private String accountInquiryUrl;
-	
+
 	@Value("${cbd.client.service.transaction.posting.url}")
 	private String transactionPostingUrl;
 
@@ -63,13 +66,12 @@ public class CbdWebServiceClient {
 	}
 
 	public ResponseEntity<String> getPartyAccountRelation(String requestBody, String correlationId) {
-		
+
 		HttpEntity<String> entity = new HttpEntity<>(requestBody);
 
-        return restTemplate.exchange(cbdWebEndPointURL+accountInquiryUrl, HttpMethod.POST, entity, String.class);
-    }
-    
-    
+		return restTemplate.exchange(cbdWebEndPointURL + accountInquiryUrl, HttpMethod.POST, entity, String.class);
+	}
+
 //	public ResponseEntity<String> getPartyAccountRelation_AccountNumber(AccountDetailsRequest accountDetailsRequest) {
 //
 //		String cbdaccountInquiryRequest = null;
@@ -105,7 +107,6 @@ public class CbdWebServiceClient {
 		 * keyStoreJksPassword.trim());
 		 */
 
-
 		if (accountDetailsRequest.getAccountNumber().startsWith("1")) {
 			cbdaccountInquiryRequest = "{\"PartyAcctRelInqRq\":{\"RqUID\":\"" + UUID.randomUUID().toString()
 					+ "\",\"MsgRqHdr\":{\"SvcIdent\":{\"SvcProviderName\":\"" + svcProviderName + "\","
@@ -127,17 +128,16 @@ public class CbdWebServiceClient {
 		headers.set("client-secret", clientSecret);
 		headers.set("x-correlation-id", UUID.randomUUID().toString());
 
-
 		HttpEntity<String> entity = new HttpEntity<>(cbdaccountInquiryRequest, headers);
 
-		ResponseEntity<String> responseString = restTemplate.exchange(cbdWebEndPointURL + accountInquiryUrl, HttpMethod.POST,
-				entity, String.class);
+		ResponseEntity<String> responseString = restTemplate.exchange(cbdWebEndPointURL + accountInquiryUrl,
+				HttpMethod.POST, entity, String.class);
 
-		logger.debug("Response Status Code: {}", responseString.getStatusCode().value());
-		logger.debug("Response Headers: {}", responseString.getHeaders());
-		logger.debug("Response Body: {}", responseString.getBody());
+		LOGGER.debug("Response Status Code: {}", responseString.getStatusCode().value());
+		LOGGER.debug("Response Headers: {}", responseString.getHeaders());
+		LOGGER.debug("Response Body: {}", responseString.getBody());
 
-		logger.debug("Response JSON String ::: " + responseString);
+		LOGGER.debug("Response JSON String ::: " + responseString);
 
 		return responseString;
 	}
@@ -166,9 +166,8 @@ public class CbdWebServiceClient {
 		headers.set("client-secret", clientSecret);
 		headers.set("x-correlation-id", UUID.randomUUID().toString());
 
-
 		// Random response generation
-		int randomResp = 1; //(int) Math.floor(Math.random() * 2);
+		int randomResp = 1; // (int) Math.floor(Math.random() * 2);
 		String mockResponse;
 		switch (randomResp) {
 		case 0:
@@ -222,33 +221,33 @@ public class CbdWebServiceClient {
 					    }
 					  }
 					}
-					
+
 					""";
 			break;
 		case 1:
 			mockResponse = """
-					        	 {
-    "XferAddRs": {
-        "Status": {
-            "StatusCode": 0,
-            "Severity": "Info",
-            "StatusDesc": "Success"
-        },
-        "RqUID": "f7f9bbcf-ff69-4810-8724-122631963213",
-        "XferRec": {
-            "XferInfo": {
-                "RefData": {
-                    "RefIdent": "ATP-06929688"
-                }
-            }
-        },
-        "XferStatusRec": {
-            "XferStatusCode": "-120",
-            "XferStatusDesc": "TRANSACTION POSTING FAILED ERR(70)"
-        }
-    }
-}
-					        	 		""";
+										        	 {
+					    "XferAddRs": {
+					        "Status": {
+					            "StatusCode": 0,
+					            "Severity": "Info",
+					            "StatusDesc": "Success"
+					        },
+					        "RqUID": "f7f9bbcf-ff69-4810-8724-122631963213",
+					        "XferRec": {
+					            "XferInfo": {
+					                "RefData": {
+					                    "RefIdent": "ATP-06929688"
+					                }
+					            }
+					        },
+					        "XferStatusRec": {
+					            "XferStatusCode": "-120",
+					            "XferStatusDesc": "TRANSACTION POSTING FAILED ERR(70)"
+					        }
+					    }
+					}
+										        	 		""";
 			break;
 
 //			{
@@ -289,23 +288,19 @@ public class CbdWebServiceClient {
 
 //			responseString = restTemplate.exchange(cbdWebEndPointURL + serviceUrl,
 //					HttpMethod.POST, entity, String.class);
-			
-		
-			 
-		responseString = new ResponseEntity<>(mockResponse, HttpStatus.OK);
 
+			responseString = new ResponseEntity<>(mockResponse, HttpStatus.OK);
 
+			LOGGER.debug("Response Status Code: {}", responseString.getStatusCode().value());
+			LOGGER.debug("Response Headers: {}", responseString.getHeaders());
+			LOGGER.debug("Response Body: {}", responseString.getBody());
 
-			logger.debug("Response Status Code: {}", responseString.getStatusCode().value());
-			logger.debug("Response Headers: {}", responseString.getHeaders());
-			logger.debug("Response Body: {}", responseString.getBody());
-
-			logger.debug("Response JSON String ::: " + responseString);
+			LOGGER.debug("Response JSON String ::: " + responseString);
 
 		} catch (HttpClientErrorException e) {
-			logger.error("HttpClientErrorException: {}", e.getMessage());
+			LOGGER.error("HttpClientErrorException: {}", e.getMessage());
 			String errorResponse = e.getResponseBodyAsString();
-			logger.error("Error Response Body: {}", errorResponse);
+			LOGGER.error("Error Response Body: {}", errorResponse);
 
 			// You can create a mock response or return the error response directly
 			responseString = new ResponseEntity<>(errorResponse, e.getStatusCode());
@@ -314,18 +309,16 @@ public class CbdWebServiceClient {
 		return responseString;
 	}
 
-
-	public BankApiCustomResponse sendCashDepositTxnRequest(Transaction deposit) throws Exception {
+	public BankApiCustomResponse<String> sendCashDepositTxnRequest(TransactionPostingRequestBean deposit) throws Exception {
 
 		System.setProperty("javax.net.ssl.trustStore", keyStoreJksPath.trim());
 		System.setProperty("javax.net.ssl.trustStorePassword", keyStoreJksPassword.trim());
 		System.setProperty("javax.net.ssl.keyStore", keyStoreJksPath.trim());
 		System.setProperty("javax.net.ssl.keyStorePassword", keyStoreJksPassword.trim());
 
- 
-
 		final RestTemplate restTemplate = new RestTemplate();
-		// String transactionPostingServiceUrl = "https://tgscdmtest.cbd.dev/exp-currentaccount-svcs-api/Services/CurrentAccount/Xfer/XferAdd";
+		// String transactionPostingServiceUrl =
+		// "https://tgscdmtest.cbd.dev/exp-currentaccount-svcs-api/Services/CurrentAccount/Xfer/XferAdd";
 
 //		String cbdTxnPostingRequest = """ 
 //				{
@@ -424,9 +417,10 @@ public class CbdWebServiceClient {
 				        }
 				    }
 				}
-				""".formatted(UUID.randomUUID().toString(), svcProviderName, svcProviderId, deposit.glAccountNumber(),
-				deposit.AccountNumber(), deposit.depositCashAmount(), deposit.uniqueTransactionId(),
-				generateCreditRefDesc(deposit), generateCreditRefDesc(deposit));
+				""".formatted(UUID.randomUUID().toString(), svcProviderName, svcProviderId, deposit.getGlAccountNumber(),
+				deposit.getAccountNumber(), deposit.getDepositAmount(), deposit.getRequestUniqueNumber(),
+				// generateCreditRefDesc(deposit), generateCreditRefDesc(deposit));
+				"TEST AB", "TEST AB");
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "application/json");
@@ -435,69 +429,288 @@ public class CbdWebServiceClient {
 		headers.set("x-correlation-id", UUID.randomUUID().toString());
 
 		HttpEntity<String> entity = new HttpEntity<>(cbdTxnPostingRequest, headers);
-		logger.debug("Request URL: {}", cbdWebEndPointURL+transactionPostingUrl);
-		logger.debug("Request Headers: {}", headers);
-		logger.debug("Request Body: {}", cbdTxnPostingRequest);
+		LOGGER.debug("Request URL: {}", cbdWebEndPointURL + transactionPostingUrl);
+		LOGGER.debug("Request Headers: {}", headers);
+		LOGGER.debug("Request Body: {}", cbdTxnPostingRequest);
 
-		logger.debug("Request JSON String ::: " + cbdTxnPostingRequest);
+		LOGGER.debug("Request JSON String ::: " + cbdTxnPostingRequest);
 		System.out.println("Request JSON String ::: " + cbdTxnPostingRequest);
+		
+		ResponseEntity<String> responseString = null;
+		try {
+			responseString = restTemplate.exchange(cbdWebEndPointURL + transactionPostingUrl,
+					HttpMethod.POST, entity, String.class);
+			LOGGER.debug("Response Status Code: {}", responseString.getStatusCode());
+			LOGGER.debug("Response Headers: {}", responseString.getHeaders());
+			LOGGER.debug("Response Body: {}", responseString.getBody());
 
-		ResponseEntity<String> responseString = restTemplate.exchange(cbdWebEndPointURL+transactionPostingUrl, HttpMethod.POST,
-				entity, String.class);
-		logger.debug("Response Status Code: {}", responseString.getStatusCode());
-		logger.debug("Response Headers: {}", responseString.getHeaders());
-		logger.debug("Response Body: {}", responseString.getBody());
-
-		logger.debug("Response JSON String ::: " + responseString);
-		System.out.println(responseString);
+			LOGGER.debug("Response JSON String ::: " + responseString);
+			System.out.println(responseString);
+		} catch (ResourceAccessException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof NoSuchAlgorithmException) {
+				LOGGER.error("NoSuchAlgorithmException encountered: " + cause.getMessage());
+				// Handle the specific case of NoSuchAlgorithmException
+				// You can throw a custom exception or return a specific error response
+				throw new CustomException("Error constructing SSL context", e);
+			} else {
+				LOGGER.error("ResourceAccessException encountered: " + e.getMessage());
+				// Handle other cases of ResourceAccessException
+				throw new CustomException("I/O error on POST request", e);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Unexpected error: " + e.getMessage());
+			// Handle other unexpected exceptions
+			throw new CustomException("Unexpected error occurred", e);
+		}
 		// System.out.println("Result ::::::::::: " + result.toString());
 
-		return new BankApiCustomResponse(responseString.getStatusCode().value(), responseString.getHeaders(),
-				cbdTxnPostingRequest, responseString.getBody());
+//		return new BankApiCustomResponse(responseString.getStatusCode().value(), responseString.getHeaders(),
+//				cbdTxnPostingRequest, responseString.getBody());
+		 return new BankApiCustomResponse<>(
+                 responseString.getStatusCode().value(), 
+                 responseString.getHeaders(), 
+                 cbdTxnPostingRequest, 
+                 responseString.getBody(), 
+                 responseString
+         );
 	}
 
-	public String generateCreditRefDesc(Transaction deposit) { // ,String customerNarration, String locationName, String
-																// accountHolderName , String accountNumber , String
-																// ccTxnId, String deviceId) {
+	public String generateCreditRefDesc(TransactionPostingRequestBean deposit) { // ,String customerNarration, String
+																					// locationName, String
+		// accountHolderName , String accountNumber , String
+		// ccTxnId, String deviceId) {
 		String narrationDesc = "";
 		String customData1 = null;
 
-		if (deposit.customerNarration() != null && !deposit.customerNarration().isBlank()) {
-			customData1 = deposit.customerNarration().toString().replaceAll("[^a-zA-Z0-9\\s\\/\\#\\-]", "");
+		if (deposit.getCustomerNarration() != null && !deposit.getCustomerNarration().isBlank()) {
+			customData1 = deposit.getCustomerNarration().toString().replaceAll("[^a-zA-Z0-9\\s\\/\\#\\-]", "");
 			customData1 = customData1.substring(0, Math.min(customData1.length(), 16));
 		}
 
-		if (deposit.locationName() != null && !deposit.locationName().isBlank()) {
-			String sanitizedLocation = deposit.locationName().toString().replaceAll("[^a-zA-Z0-9\\s]+", "");
+		if (deposit.getDeviceLocationName() != null && !deposit.getDeviceLocationName().isBlank()) {
+			String sanitizedLocation = deposit.getDeviceLocationName().toString().replaceAll("[^a-zA-Z0-9\\s]+", "");
 			sanitizedLocation = sanitizedLocation.substring(0, Math.min(sanitizedLocation.length(), 16));
 
-			if (deposit.AccountHolderName() != null && !deposit.AccountHolderName().isBlank()) {
-				String sanitizedAccountHolder = deposit.AccountHolderName().toString().replaceAll("[^a-zA-Z0-9\\s]+",
+			if (deposit.getAccountHolderName() != null && !deposit.getAccountHolderName().isBlank()) {
+				String sanitizedAccountHolder = deposit.getAccountHolderName().toString().replaceAll("[^a-zA-Z0-9\\s]+",
 						"");
 				sanitizedAccountHolder = sanitizedAccountHolder.substring(0,
 						Math.min(sanitizedAccountHolder.length(), 33));
 
-				if (deposit.AccountNumber() != null && (deposit.AccountNumber().toString().startsWith("1")
-						|| deposit.AccountNumber().toString().startsWith("2"))) {
+				if (deposit.getAccountNumber() != null && (deposit.getAccountNumber().toString().startsWith("1")
+						|| deposit.getAccountNumber().toString().startsWith("2"))) {
 					narrationDesc = (customData1 != null && !customData1.isBlank())
-							? "CBD SCDM %s %s %d %s %s".formatted(sanitizedLocation, deposit.DeviceId().toString(),
-									deposit.ccTxnId().toString(), customData1)
-							: "CBD SCDM %s %s %d %s".formatted(sanitizedLocation, deposit.DeviceId().toString(),
-									deposit.ccTxnId().toString());
+							? "CBD SCDM %s %s %d %s %s".formatted(sanitizedLocation, deposit.getDeviceId().toString(),
+									deposit.getCcTxnId().toString(), customData1)
+							: "CBD SCDM %s %s %d %s".formatted(sanitizedLocation, deposit.getDeviceId().toString(),
+									deposit.getCcTxnId().toString());
 				} else {
-					narrationDesc = "Cash Dep SCDM %s %s %s".formatted(deposit.AccountNumber().toString(),
+					narrationDesc = "Cash Dep SCDM %s %s %s".formatted(deposit.getAccountNumber().toString(),
 							sanitizedAccountHolder, customData1);
 				}
 			} else {
-				narrationDesc = "CBD SCDM %s %s %d %s".formatted(sanitizedLocation, deposit.DeviceId().toString(),
-						deposit.ccTxnId().toString(), customData1);
+				narrationDesc = "CBD SCDM %s %s %d %s".formatted(sanitizedLocation, deposit.getDeviceId().toString(),
+						deposit.getCcTxnId().toString(), customData1);
 			}
 		} else {
-			narrationDesc = "CBD SCDM %s %d %s".formatted(deposit.locationName().toString(),
-					deposit.DeviceId().toString(), customData1);
+			narrationDesc = "CBD SCDM %s %d %s".formatted(deposit.getDeviceLocationName().toString(),
+					deposit.getDeviceId().toString(), customData1);
 		}
 
 		return narrationDesc;
+	}
+	
+	public BankApiCustomResponse<String> sendCashDepositTxnRequest_mock(TransactionPostingRequestBean deposit) throws Exception {
+
+		String cbdTxnPostingRequest = """
+				{
+				    "XferAddRq": {
+				        "RqUID": "%s",
+				        "MsgRqHdr": {
+				            "SvcIdent": {
+				                "SvcProviderName": "%s",
+				                "SvcProviderId": "%s",
+				                "SvcName": "Transfer-Posting",
+				                "SvcId": "156",
+				                "OriginatorID": "533"
+				            }
+				        },
+				        "XferInfo": {
+				            "FromAcctRef": {
+				                "AcctKeys": {
+				                    "AcctId": "%s",
+				                    "AcctType": "CK",
+				                    "CurCode": {
+				                        "CurCodeType": "ISO 4217",
+				                        "CurCodeValue": "AED"
+				                    }
+				                }
+				            },
+				            "ToAcctRef": {
+				                "AcctKeys": {
+				                    "AcctId": "%s",
+				                    "AcctType": "CK",
+				                    "CurCode": {
+				                        "CurCodeType": "ISO 4217",
+				                        "CurCodeValue": "AED"
+				                    }
+				                }
+				            },
+				            "CurAmt": {
+				                "Amt": %s
+				            },
+				            "ExpediteInd": false,
+				            "ReversalInd": false,
+				            "DebitInd": true,
+				            "RefData": {
+				                "RefIdent": "%s",
+				                "CreditRefDesc": "%s",
+				                "DebitRefDesc": "%s"
+				            }
+				        }
+				    }
+				}
+				""".formatted(UUID.randomUUID().toString(), svcProviderName, svcProviderId, deposit.getGlAccountNumber(),
+				deposit.getAccountNumber(), deposit.getDepositAmount(), deposit.getRequestUniqueNumber(),
+				// generateCreditRefDesc(deposit), generateCreditRefDesc(deposit));
+				"CBD SCDM CBD TESTING 1305 38 test", "CBD SCDM CBD TESTING 1305 38 test");
+		
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", "application/json");
+		headers.set("client-id", clientId);
+		headers.set("client-secret", clientSecret);
+		headers.set("x-correlation-id", UUID.randomUUID().toString());
+
+		// Random response generation
+		int randomResp =  (int) Math.floor(Math.random() * 2);
+		String mockResponse;
+		switch (randomResp) {
+		case 0:
+			mockResponse = """
+					{
+					  "XferAddRs": {
+					    "Status": {
+					      "StatusCode": 0,
+					      "Severity": "Info",
+					      "StatusDesc": "Success"
+					    },
+					    "RqUID": "784c46d9-64da-4bb6-ac06-2dc5f5cf1fb6",
+					    "XferRec": {
+					      "XferInfo": {
+					        "DebitRef": {
+					          "CurAmt": {
+					            "Amt": 30.000000,
+					            "CurCode": "AED"
+					          }
+					        },
+					        "CreditRef": {
+					          "CurAmt": {
+					            "Amt": 30.000000,
+					            "CurCode": "AED"
+					          }
+					        },
+					        "RefData": {
+					          "RefIdent": "ATP-06929688"
+					        }
+					      }
+					    },
+					    "XferStatusRec": {
+					      "XferStatusCode": "0",
+					      "XferStatusDesc": "TRANSACTION POSTED SUCCESSFULLY"
+					    }
+					  }
+					}
+					""";
+			break;
+		case 1:
+			mockResponse = """
+					{
+					  "XferAddRs": {
+					    "Status": {
+					      "StatusCode": 0,
+					      "Severity": "Info",
+					      "StatusDesc": "Success"
+					    },
+					    "RqUID": "6b16b5ed-8dcb-4ad1-85a5-72bb6a380820",
+					    "XferRec": {
+					      "XferInfo": {
+					        "RefData": {
+					          "RefIdent": "ATP-06929688"
+					        }
+					      }
+					    },
+					    "XferStatusRec": {
+					      "XferStatusCode": "-119",
+					      "XferStatusDesc": "TRANSACTION AMOUNT EXCEEDS DAILY LIMIT"
+					    }
+					  }
+					}
+					""";
+			break;
+
+
+
+		default:
+			mockResponse = """
+					{
+					  "XferAddRs": {
+					    "Status": {
+					      "StatusCode": 0,
+					      "Severity": "Info",
+					      "StatusDesc": "Success"
+					    },
+					    "RqUID": "fb09ee14-1b96-4af0-9cfa-fa485f28073f",
+					    "XferRec": {
+					      "XferInfo": {
+					        "RefData": {
+					          "RefIdent": "812120240708153418"
+					        }
+					      }
+					    },
+					    "XferStatusRec": {
+					      "XferStatusCode": "-121",
+					      "XferStatusDesc": "TRANSACTION POSTING FAILED ERR(-809335)"
+					    }
+					  }
+					}
+					""";
+			break;
+		}
+		ResponseEntity<String> responseString = null;
+		try {
+
+//			responseString = restTemplate.exchange(cbdWebEndPointURL + serviceUrl,
+//					HttpMethod.POST, entity, String.class);
+
+			responseString = new ResponseEntity<>(mockResponse, HttpStatus.OK);
+
+			LOGGER.debug("Response Status Code: {}", responseString.getStatusCode().value());
+			LOGGER.debug("Response Headers: {}", responseString.getHeaders());
+			LOGGER.debug("Response Body: {}", responseString.getBody());
+
+			LOGGER.debug("Response JSON String ::: " + responseString);
+
+		} catch (HttpClientErrorException e) {
+			LOGGER.error("HttpClientErrorException: {}", e.getMessage());
+			String errorResponse = e.getResponseBodyAsString();
+			LOGGER.error("Error Response Body: {}", errorResponse);
+
+			// You can create a mock response or return the error response directly
+			responseString = new ResponseEntity<>(errorResponse, e.getStatusCode());
+		}
+
+//		return new BankApiCustomResponse(responseString.getStatusCode().value(), responseString.getHeaders(),
+//				cbdTxnPostingRequest, responseString.getBody());
+		
+		  return new BankApiCustomResponse<>(
+                  responseString.getStatusCode().value(), 
+                  responseString.getHeaders(), 
+                  cbdTxnPostingRequest, 
+                  responseString.getBody(), 
+                  responseString
+          );
 	}
 
 }

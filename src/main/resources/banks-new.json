@@ -1,0 +1,185 @@
+[
+
+  {
+
+    "id": 1,
+
+    "name": "DEEM",
+
+    "logo": "deem.jpg",
+
+    "enableAccountDeposit": false,
+
+    "enableCreditCardBillPayment": false,
+
+    "enableManualAccountEntry": false,
+
+    "enableAccountFromDebitCard": false,
+
+    "enableEIDValidation": true,
+
+    "enableEIDOnlineValidation": false,
+
+    "enableNarrationEntry": true,
+
+    "enablePayinAmountEntry": false,
+
+    "enableCardBasedCreditCard": false,
+
+    "enableManualCreditCardEntry": false,
+
+    "checkAccountNumberLength": false,
+
+    "accountNumberLength": 10,
+
+    "additionalInputs": [
+
+      {
+
+        "id": 1,
+
+        "name": "Loan number",
+
+        "numeric": false,
+
+        "predefinedValues": [],
+
+        "UIPrompt": "Please enter your credit card / loan number",
+
+      "mask": true,
+
+      "maskStart": 1,
+
+     "maskSize": 0,
+
+      "maskNumberOfLastVisibleCharacters": 4,
+
+      "maskFill": "*",
+
+        "mandatory": true,
+
+      "maxLength": 20},
+
+      {
+
+        "id": 2,
+
+        "name": "Mobile number ",
+
+        "numeric": true,
+
+        "predefinedValues": [],
+
+        "UIPrompt": "ENTER_MOBILE",
+
+        "mask": true,
+
+      "maskStart": 1,
+
+     "maskSize": 0,
+
+      "maskNumberOfLastVisibleCharacters": 4,
+
+      "maskFill": "*",
+
+        "mandatory": true,
+
+      "maxLength": 20},
+
+    {
+
+        "id": 3,
+
+        "name": "Narration ",
+
+        "numeric": false,
+
+        "predefinedValues": [],
+
+        "UIPrompt": "Please enter your optional narration",
+
+           "mask": false,
+
+      "maskStart": 1,
+
+     "maskSize": 0,
+
+      "maskNumberOfLastVisibleCharacters": 4,
+
+      "maskFill": "*",
+
+        "mandatory": false,
+
+      "maxLength": 15}]
+
+  },
+
+  {
+
+    "id": 2,
+
+    "name": "CBD",
+
+    "logo": "cbd.jpg",
+
+    "enableAccountDeposit": true,
+
+    "enableCreditCardBillPayment": false,
+
+    "enableManualAccountEntry": true,
+
+    "enableAccountFromDebitCard": false,
+
+    "enableEIDValidation": true,
+
+    "enableEIDOnlineValidation": false,
+
+    "enableNarrationEntry": false,
+
+    "enablePayinAmountEntry": false,
+
+    "enableCardBasedCreditCard": false,
+
+    "enableManualCreditCardEntry": false,
+
+    "checkAccountNumberLength": true,
+
+    "accountNumberLength": 8,
+
+    "additionalInputs": [
+
+      {
+
+        "id": 1,
+
+        "name": "Narration",
+
+        "numeric": false,
+
+        "predefinedValues": [],
+
+        "UIPrompt": "Please enter your optional narration",
+
+      "mask": false,
+
+      "maskStart": 1,
+
+     "maskSize": 0,
+
+      "maskNumberOfLastVisibleCharacters": 4,
+
+      "maskFill": "*",
+
+        "mandatory": false,
+
+      "maxLength": 20
+
+      }
+
+    ]
+
+  }
+
+]
+
+ 

@@ -28,11 +28,15 @@ public class AccountDetailsResponse {
     private String currencyCode;
     private String accountStatus;
     private Boolean depositAllowed;
-    private String bankErrorCode;
-    private String bankErrorDesc;
+    private String bankWebServiceCode;
+    private String bankWebServiceDesc;
     private String bankApiResponseMessage;
-    private int cdmApiCode;
     private String cdmCustomerErrorMessage;
+    
+    private int cdmApiCode;
+    private String internalWebServiceCode;
+    private String internalWebServiceDesc;
+    
     private String extraField1;
     private String extraField2;
     private String extraField3;
@@ -110,17 +114,17 @@ public class AccountDetailsResponse {
 	public void setDepositAllowed(Boolean depositAllowed) {
 		this.depositAllowed = depositAllowed;
 	}
-	public String getBankErrorCode() {
-		return bankErrorCode;
+	public String getBankWebServiceCode() {
+		return bankWebServiceCode;
 	}
-	public void setBankErrorCode(String bankErrorCode) {
-		this.bankErrorCode = bankErrorCode;
+	public void setBankWebServiceCode(String bankWebServiceCode) {
+		this.bankWebServiceCode = bankWebServiceCode;
 	}
-	public String getBankErrorDesc() {
-		return bankErrorDesc;
+	public String getBankWebServiceDesc() {
+		return bankWebServiceDesc;
 	}
-	public void setBankErrorDesc(String bankErrorDesc) {
-		this.bankErrorDesc = bankErrorDesc;
+	public void setBankWebServiceDesc(String bankWebServiceDesc) {
+		this.bankWebServiceDesc = bankWebServiceDesc;
 	}
 	public String getBankApiResponseMessage() {
 		return bankApiResponseMessage;
@@ -128,17 +132,29 @@ public class AccountDetailsResponse {
 	public void setBankApiResponseMessage(String bankApiResponseMessage) {
 		this.bankApiResponseMessage = bankApiResponseMessage;
 	}
+	public String getCdmCustomerErrorMessage() {
+		return cdmCustomerErrorMessage;
+	}
+	public void setCdmCustomerErrorMessage(String cdmCustomerErrorMessage) {
+		this.cdmCustomerErrorMessage = cdmCustomerErrorMessage;
+	}
 	public int getCdmApiCode() {
 		return cdmApiCode;
 	}
 	public void setCdmApiCode(int cdmApiCode) {
 		this.cdmApiCode = cdmApiCode;
 	}
-	public String getCdmCustomerErrorMessage() {
-		return cdmCustomerErrorMessage;
+	public String getInternalWebServiceCode() {
+		return internalWebServiceCode;
 	}
-	public void setCdmCustomerErrorMessage(String cdmCustomerErrorMessage) {
-		this.cdmCustomerErrorMessage = cdmCustomerErrorMessage;
+	public void setInternalWebServiceCode(String internalWebServiceCode) {
+		this.internalWebServiceCode = internalWebServiceCode;
+	}
+	public String getInternalWebServiceDesc() {
+		return internalWebServiceDesc;
+	}
+	public void setInternalWebServiceDesc(String internalWebServiceDesc) {
+		this.internalWebServiceDesc = internalWebServiceDesc;
 	}
 	public String getExtraField1() {
 		return extraField1;
@@ -170,52 +186,13 @@ public class AccountDetailsResponse {
 	public void setExtraField5(String extraField5) {
 		this.extraField5 = extraField5;
 	}
-	@Override
-	public String toString() {
-		return "AccountDetailsResponse [requestUniqueNumber=" + requestUniqueNumber + ", accountNumber=" + accountNumber
-				+ ", accountHolderName=" + accountHolderName + ", accountType=" + accountType + ", dailyDepositLimit="
-				+ dailyDepositLimit + ", monthtlyTransactionLimit=" + monthtlyTransactionLimit
-				+ ", yearlyTransactionLimit=" + yearlyTransactionLimit + ", cifNumber=" + cifNumber + ", bankPaymentId="
-				+ bankPaymentId + ", currencyCode=" + currencyCode + ", accountStatus=" + accountStatus
-				+ ", depositAllowed=" + depositAllowed + ", bankErrorCode=" + bankErrorCode + ", bankErrorDesc="
-				+ bankErrorDesc + ", bankApiResponseMessage=" + bankApiResponseMessage + ", cdmApiCode=" + cdmApiCode
-				+ ", cdmCustomerErrorMessage=" + cdmCustomerErrorMessage + ", extraField1=" + extraField1
-				+ ", extraField2=" + extraField2 + ", extraField3=" + extraField3 + ", extraField4=" + extraField4
-				+ ", extraField5=" + extraField5 + "]";
-	}
-	public AccountDetailsResponse(String requestUniqueNumber, String accountNumber, String accountHolderName,
-			String accountType, String dailyDepositLimit, String monthtlyTransactionLimit,
-			String yearlyTransactionLimit, String cifNumber, String bankPaymentId, String currencyCode,
-			String accountStatus, Boolean depositAllowed, String bankErrorCode, String bankErrorDesc,
-			String bankApiResponseMessage, int cdmApiCode, String cdmCustomerErrorMessage, String extraField1,
-			String extraField2, String extraField3, String extraField4, String extraField5) {
-		super();
-		this.requestUniqueNumber = requestUniqueNumber;
-		this.accountNumber = accountNumber;
-		this.accountHolderName = accountHolderName;
-		this.accountType = accountType;
-		this.dailyDepositLimit = dailyDepositLimit;
-		this.monthtlyTransactionLimit = monthtlyTransactionLimit;
-		this.yearlyTransactionLimit = yearlyTransactionLimit;
-		this.cifNumber = cifNumber;
-		this.bankPaymentId = bankPaymentId;
-		this.currencyCode = currencyCode;
-		this.accountStatus = accountStatus;
-		this.depositAllowed = depositAllowed;
-		this.bankErrorCode = bankErrorCode;
-		this.bankErrorDesc = bankErrorDesc;
-		this.bankApiResponseMessage = bankApiResponseMessage;
-		this.cdmApiCode = cdmApiCode;
-		this.cdmCustomerErrorMessage = cdmCustomerErrorMessage;
-		this.extraField1 = extraField1;
-		this.extraField2 = extraField2;
-		this.extraField3 = extraField3;
-		this.extraField4 = extraField4;
-		this.extraField5 = extraField5;
-	}
-	public AccountDetailsResponse() {
-		super();
-	}
+	
+    
+    
+    
+    
+    
+    
     
     
     

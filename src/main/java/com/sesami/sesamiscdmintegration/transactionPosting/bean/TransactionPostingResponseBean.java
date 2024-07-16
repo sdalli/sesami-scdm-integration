@@ -8,11 +8,17 @@ public class TransactionPostingResponseBean {
     private String bankCode;
 	private String accountNumber;
     private String bankUniqueTransactionNumber;
-    private String bankErrorCode;
-    private String bankErrorDesc;
+    private String bankWebServiceCode;
+    private String bankWebServiceDesc;
+    
     private String bankApiResponseMessage;
-    private int cdmApiCode;
     private String cdmCustomerErrorMessage;
+    
+    
+    private int cdmApiCode;
+    private String internalWebServiceCode;
+    private String internalWebServiceDesc;
+    
     
     
     private String extraField1;
@@ -50,17 +56,17 @@ public class TransactionPostingResponseBean {
 	public void setBankUniqueTransactionNumber(String bankUniqueTransactionNumber) {
 		this.bankUniqueTransactionNumber = bankUniqueTransactionNumber;
 	}
-	public String getBankErrorCode() {
-		return bankErrorCode;
+	public String getBankWebServiceCode() {
+		return bankWebServiceCode;
 	}
-	public void setBankErrorCode(String bankErrorCode) {
-		this.bankErrorCode = bankErrorCode;
+	public void setBankWebServiceCode(String bankWebServiceCode) {
+		this.bankWebServiceCode = bankWebServiceCode;
 	}
-	public String getBankErrorDesc() {
-		return bankErrorDesc;
+	public String getBankWebServiceDesc() {
+		return bankWebServiceDesc;
 	}
-	public void setBankErrorDesc(String bankErrorDesc) {
-		this.bankErrorDesc = bankErrorDesc;
+	public void setBankWebServiceDesc(String bankWebServiceDesc) {
+		this.bankWebServiceDesc = bankWebServiceDesc;
 	}
 	public String getBankApiResponseMessage() {
 		return bankApiResponseMessage;
@@ -68,17 +74,29 @@ public class TransactionPostingResponseBean {
 	public void setBankApiResponseMessage(String bankApiResponseMessage) {
 		this.bankApiResponseMessage = bankApiResponseMessage;
 	}
+	public String getCdmCustomerErrorMessage() {
+		return cdmCustomerErrorMessage;
+	}
+	public void setCdmCustomerErrorMessage(String cdmCustomerErrorMessage) {
+		this.cdmCustomerErrorMessage = cdmCustomerErrorMessage;
+	}
 	public int getCdmApiCode() {
 		return cdmApiCode;
 	}
 	public void setCdmApiCode(int cdmApiCode) {
 		this.cdmApiCode = cdmApiCode;
 	}
-	public String getCdmCustomerErrorMessage() {
-		return cdmCustomerErrorMessage;
+	public String getInternalWebServiceCode() {
+		return internalWebServiceCode;
 	}
-	public void setCdmCustomerErrorMessage(String cdmCustomerErrorMessage) {
-		this.cdmCustomerErrorMessage = cdmCustomerErrorMessage;
+	public void setInternalWebServiceCode(String internalWebServiceCode) {
+		this.internalWebServiceCode = internalWebServiceCode;
+	}
+	public String getInternalWebServiceDesc() {
+		return internalWebServiceDesc;
+	}
+	public void setInternalWebServiceDesc(String internalWebServiceDesc) {
+		this.internalWebServiceDesc = internalWebServiceDesc;
 	}
 	public String getExtraField1() {
 		return extraField1;
@@ -111,31 +129,9 @@ public class TransactionPostingResponseBean {
 		this.extraField5 = extraField5;
 	}
 	
-	
-	public TransactionPostingResponseBean() {
-		super();
-	}
-	public TransactionPostingResponseBean(String requestUniqueNumber, String deviceId, String bankCode,
-			String accountNumber, String bankUniqueTransactionNumber, String bankErrorCode, String bankErrorDesc,
-			String bankApiResponseMessage, int cdmApiCode, String cdmCustomerErrorMessage, String extraField1,
-			String extraField2, String extraField3, String extraField4, String extraField5) {
-		super();
-		this.requestUniqueNumber = requestUniqueNumber;
-		this.deviceId = deviceId;
-		this.bankCode = bankCode;
-		this.accountNumber = accountNumber;
-		this.bankUniqueTransactionNumber = bankUniqueTransactionNumber;
-		this.bankErrorCode = bankErrorCode;
-		this.bankErrorDesc = bankErrorDesc;
-		this.bankApiResponseMessage = bankApiResponseMessage;
-		this.cdmApiCode = cdmApiCode;
-		this.cdmCustomerErrorMessage = cdmCustomerErrorMessage;
-		this.extraField1 = extraField1;
-		this.extraField2 = extraField2;
-		this.extraField3 = extraField3;
-		this.extraField4 = extraField4;
-		this.extraField5 = extraField5;
-	}
+    
+    
+    
 	
 	
 }

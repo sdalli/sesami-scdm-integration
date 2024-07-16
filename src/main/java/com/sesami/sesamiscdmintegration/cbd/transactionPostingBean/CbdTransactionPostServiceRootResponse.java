@@ -2,7 +2,7 @@ package com.sesami.sesamiscdmintegration.cbd.transactionPostingBean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RootResponse {
+public class CbdTransactionPostServiceRootResponse {
     @JsonProperty("XferAddRs")
     private XferAddRs xferAddRs;
 

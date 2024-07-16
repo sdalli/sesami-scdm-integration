@@ -4,9 +4,11 @@ public class TransactionPostingRequestBean {
 
 	
 	private String requestUniqueNumber;
+	private String ccTxnId;
 	private String deviceId;
     private String bankCode;
     private String glAccountNumber;
+    private String deviceLocationName;
     
 	private String accountNumber;
     private String accountHolderName;
@@ -200,58 +202,21 @@ public class TransactionPostingRequestBean {
 	public void setExtraField5(String extraField5) {
 		this.extraField5 = extraField5;
 	}
-	@Override
-	public String toString() {
-		return "TransactionPostingRequestBean [requestUniqueNumber=" + requestUniqueNumber + ", deviceId=" + deviceId
-				+ ", bankCode=" + bankCode + ", glAccountNumber=" + glAccountNumber + ", accountNumber=" + accountNumber
-				+ ", accountHolderName=" + accountHolderName + ", accountType=" + accountType + ", dailyDepositLimit="
-				+ dailyDepositLimit + ", monthtlyTransactionLimit=" + monthtlyTransactionLimit
-				+ ", yearlyTransactionLimit=" + yearlyTransactionLimit + ", cifNumber=" + cifNumber + ", bankPaymentId="
-				+ bankPaymentId + ", accountStatus=" + accountStatus + ", customerNarration=" + customerNarration
-				+ ", eidNo=" + eidNo + ", eidName=" + eidName + ", eidExpiryDate=" + eidExpiryDate + ", eiddateofBirth="
-				+ eiddateofBirth + ", nationality=" + nationality + ", currencyCode=" + currencyCode
-				+ ", depositAmount=" + depositAmount + ", currencyDenominationDetails=" + currencyDenominationDetails
-				+ ", extraField1=" + extraField1 + ", extraField2=" + extraField2 + ", extraField3=" + extraField3
-				+ ", extraField4=" + extraField4 + ", extraField5=" + extraField5 + "]";
-	}
-	public TransactionPostingRequestBean(String requestUniqueNumber, String deviceId, String bankCode,
-			String glAccountNumber, String accountNumber, String accountHolderName, String accountType,
-			String dailyDepositLimit, String monthtlyTransactionLimit, String yearlyTransactionLimit, String cifNumber,
-			String bankPaymentId, String accountStatus, String customerNarration, String eidNo, String eidName,
-			String eidExpiryDate, String eiddateofBirth, String nationality, String currencyCode, String depositAmount,
-			String currencyDenominationDetails, String extraField1, String extraField2, String extraField3,
-			String extraField4, String extraField5) {
-		super();
-		this.requestUniqueNumber = requestUniqueNumber;
-		this.deviceId = deviceId;
-		this.bankCode = bankCode;
-		this.glAccountNumber = glAccountNumber;
-		this.accountNumber = accountNumber;
-		this.accountHolderName = accountHolderName;
-		this.accountType = accountType;
-		this.dailyDepositLimit = dailyDepositLimit;
-		this.monthtlyTransactionLimit = monthtlyTransactionLimit;
-		this.yearlyTransactionLimit = yearlyTransactionLimit;
-		this.cifNumber = cifNumber;
-		this.bankPaymentId = bankPaymentId;
-		this.accountStatus = accountStatus;
-		this.customerNarration = customerNarration;
-		this.eidNo = eidNo;
-		this.eidName = eidName;
-		this.eidExpiryDate = eidExpiryDate;
-		this.eiddateofBirth = eiddateofBirth;
-		this.nationality = nationality;
-		this.currencyCode = currencyCode;
-		this.depositAmount = depositAmount;
-		this.currencyDenominationDetails = currencyDenominationDetails;
-		this.extraField1 = extraField1;
-		this.extraField2 = extraField2;
-		this.extraField3 = extraField3;
-		this.extraField4 = extraField4;
-		this.extraField5 = extraField5;
-	}
+
 	public TransactionPostingRequestBean() {
 		super();
+	}
+	public String getCcTxnId() {
+		return ccTxnId;
+	}
+	public void setCcTxnId(String ccTxnId) {
+		this.ccTxnId = ccTxnId;
+	}
+	public String getDeviceLocationName() {
+		return deviceLocationName;
+	}
+	public void setDeviceLocationName(String deviceLocationName) {
+		this.deviceLocationName = deviceLocationName;
 	}
 	
 	

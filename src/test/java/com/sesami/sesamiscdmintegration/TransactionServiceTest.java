@@ -17,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.sesami.sesamiscdmintegration.bank.bean.BankApiCustomResponse;
-import com.sesami.sesamiscdmintegration.bank.bean.Transaction;
 import com.sesami.sesamiscdmintegration.cbd.service.CbdAccountInquiryClientService;
 
 @SpringBootTest
@@ -96,10 +94,10 @@ public class TransactionServiceTest {
                 .thenReturn(responseEntity);
 
         // Create a sample Transaction object
-        Transaction deposit = new Transaction("100010000022", "100-200-1254", "100000001", "Account holder name" ,"100.00","CBD Test Branch","CBD Narration","100100","1");
+      //  Transaction deposit = new Transaction("100010000022", "100-200-1254", "100000001", "Account holder name" ,"100.00","CBD Test Branch","CBD Narration","100100","1");
 
         // Call the method to test
-        BankApiCustomResponse response = cbdAccountInquiryClientService.sendCashDepositTxnRequest(deposit);
+       // BankApiCustomResponse<?> response = cbdAccountInquiryClientService.sendCashDepositTxnRequest(deposit);
 
         // Assertions to verify the response
         // Add your assertions here based on the expected behavior
