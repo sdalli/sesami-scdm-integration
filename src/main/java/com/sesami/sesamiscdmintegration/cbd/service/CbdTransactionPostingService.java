@@ -1,6 +1,7 @@
 package com.sesami.sesamiscdmintegration.cbd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sesami.sesamiscdmintegration.bank.bean.BankApiCustomResponse;
@@ -15,6 +16,12 @@ public class CbdTransactionPostingService {
 	@Autowired
 	private CbdWebServiceClient cbdWebServiceClient;
 	
+	
+	@Value("${cdmCustomerSuccessMessage}")
+	private String cdmCustomerSuccessMessage;
+	
+	@Value("${cdmCustomerFailureMessage}")
+	private String cdmCustomerFailureMessage;
 	
 	// Java 22 
 	
@@ -102,12 +109,14 @@ public class CbdTransactionPostingService {
 					transactionPostingResponseBean.setBankWebServiceDesc(transactionPostServiceRootResponse.getXferAddRs().getXferStatusRec().getXferStatusDesc());
 					transactionPostingResponseBean.setInternalWebServiceCode("200");
 					transactionPostingResponseBean.setInternalWebServiceDesc("SUCCESS");
+					transactionPostingResponseBean.setCdmCustomerErrorMessage(String.format(cdmCustomerSuccessMessage, transactionPostingRequestBean.getBankCode(), transactionPostingRequestBean.getRequestUniqueNumber()));
 				}else {
 					
 					transactionPostingResponseBean.setBankWebServiceCode(transactionPostServiceRootResponse.getXferAddRs().getXferStatusRec().getXferStatusCode());
 					transactionPostingResponseBean.setBankWebServiceDesc(transactionPostServiceRootResponse.getXferAddRs().getXferStatusRec().getXferStatusDesc());
 					transactionPostingResponseBean.setInternalWebServiceCode("400");
 					transactionPostingResponseBean.setInternalWebServiceDesc("FAILED");
+					transactionPostingResponseBean.setCdmCustomerErrorMessage(String.format(cdmCustomerFailureMessage, transactionPostingRequestBean.getBankCode(), transactionPostingRequestBean.getRequestUniqueNumber()));
 					
 				}
 				
@@ -124,7 +133,6 @@ public class CbdTransactionPostingService {
 		
 		return transactionPostingResponseBean;
 	}
-	
 	
 	
 	
